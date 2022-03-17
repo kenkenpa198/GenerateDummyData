@@ -68,18 +68,20 @@ https://faker.readthedocs.io/en/master/providers/faker.providers.misc.html?highl
 '''
 def generate_dummy_raw():
 
-    # クラス指定の短縮など
+    # クラスと関数を変数へ格納
     Faker = Factory.create
     fake = Faker()
+
+    # 生成の設定
     # fake.seed(0)            # シード値をここで指定すると生成されるデータを固定できる
     fake = Faker(st.LANGUAGE) # ダミーデータのローカライズを設定
 
-    # CSV 形式でダミーデータの raw テキストを生成する
+    # ダミーデータの raw テキストを生成
     raw_text = fake.csv(
         header=st.HEADER,             # ヘッダー設定を読み込み
-        data_columns=st.DATA_COLUMNS, # 値設定を読み込み
-        num_rows=st.TOTAL_ROWS_NUM,   # 総行数設定を読み込み
-        include_row_ids=False,        # 重複を許可しない設定（たぶん…）
+        data_columns=st.DATA_COLUMNS, # 値のオプション設定を読み込み
+        num_rows=st.TOTAL_ROWS_NUM,   # 生成行数設定を読み込み
+        include_row_ids=False         # 重複を許可しない設定（たぶん…）
     )
 
     return raw_text

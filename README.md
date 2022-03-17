@@ -38,7 +38,7 @@ Generate Dummy Data は MIT ライセンスの下でリリースされていま�
 ### 4.1. 利用ソフトウェア
 
 - [Python](https://www.python.org/)
-- [joke2k/faker](https://github.com/joke2k/faker/blob/master/docs/index.rst)
+- [joke2k/faker](https://github.com/joke2k/faker)
 
 ### 4.2. 参考サイト様
 
