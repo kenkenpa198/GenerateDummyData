@@ -13,8 +13,8 @@ import settings as st
 '''
 ■ 出力先のディレクトリを作成する関数
 
-NOTE:
 デフォルトだと Python の実行ファイルと同じ階層の export ディレクトリへ出力する。
+保存先となるディレクトリパスも返す。
 
 '''
 def make_export_dir_path(parent_dir_path=os.path.dirname(os.path.abspath(__file__)), dir_name="export"):
@@ -31,15 +31,17 @@ def make_export_dir_path(parent_dir_path=os.path.dirname(os.path.abspath(__file_
 '''
 ■ 出力先のファイルパスを作成する関数
 
-NOTE:
-result_YYYYMMDDhhmmss.csv の形で出力する。
+指定ディレクトリ/result_YYYYMMDDhhmmss.csv の形で返す。
 
 '''
 def make_export_file_path(export_dir_path):
 
+    # ファイル名の作成
     dt_now = datetime.datetime.now().strftime('%Y%m%d%H%M%S')  # 現在の日時を取得
     filename = f'result_{dt_now}.csv'                          # ファイル名を設定
-    export_file_path = os.path.join(export_dir_path, filename) # ファイルパスを設定
+
+    # ファイルパスの作成
+    export_file_path = os.path.join(export_dir_path, filename) # ディレクトリパスとファイル名を結合
 
     return export_file_path
 
@@ -47,7 +49,6 @@ def make_export_file_path(export_dir_path):
 '''
 ■ ダミーデータの CSV を出力する関数
 
-NOTE:
 外部モジュールの Faker を使ってダミーデータを生成する。
 settings.py で設定した情報を基にする。
 
@@ -67,15 +68,15 @@ https://faker.readthedocs.io/en/master/providers/faker.providers.misc.html?highl
 '''
 def generate_dummy_raw():
 
-    # おまじない
+    # クラス指定の短縮など
     Faker = Factory.create
     fake = Faker()
-    fake.seed(0)
+    # fake.seed(0)            # シード値をここで指定すると生成されるデータを固定できる
     fake = Faker(st.LANGUAGE) # ダミーデータのローカライズを設定
 
     # CSV 形式でダミーデータの raw テキストを生成する
     raw_text = fake.csv(
-        header=st.HEADER,            # ヘッダー設定を読み込み
+        header=st.HEADER,             # ヘッダー設定を読み込み
         data_columns=st.DATA_COLUMNS, # 値設定を読み込み
         num_rows=st.TOTAL_ROWS_NUM,   # 総行数設定を読み込み
         include_row_ids=False,        # 重複を許可しない設定（たぶん…）
