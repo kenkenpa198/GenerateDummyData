@@ -35,6 +35,7 @@ try:
     export_file_path = ut.make_export_file_path(ut.make_export_dir_path())
 
     # ダミーデータを生成
+    print('\nダミーデータを生成しています……')
     raw = ut.generate_dummy_raw()
 
     print('\n▼ 生成結果')
