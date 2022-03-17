@@ -5,7 +5,7 @@
 
 ## 1. 導入方法・使い方
 
-1. zip ファイルを展開する。
+1. zip ファイルを展開して PowerShell でディレクトリを開く。
 2. `pip install -r requirements.txt` を送信して必要モジュールをインストールする。
 3. ディレクトリ直下の settings.py を開き、コメントを参考に設定して保存する。
 4. `python3 GenerateDummyCSV.py` を送信するか、run-GDD.bat を実行する。
