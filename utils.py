@@ -4,10 +4,59 @@ utils.py / 自作モジュール
 '''''''''''''''''''''''''''''''''''''''
 import datetime
 import os
+from pprint import pprint
 
 from faker.factory import Factory
 
 import settings as st
+
+
+'''
+■ 生成設定をプリントする関数
+'''
+def print_settings():
+    print('\n▼ 生成設定')
+    print('----------------------------------------------------------')
+
+    print(f'生成行数       : {st.GENERATE_ROWS_NUM} 行')
+    print(f'値の言語設定   : {st.LANGUAGE}')
+
+    seed_setting = st.SEED if st.SEED else '設定なし'
+    print(f'シード値の設定 : {seed_setting}')
+
+    print('----------------------------------------------------------')
+
+    print(f'\n▼生成するダミーデータの設定')
+    print('----------------------------------------------------------')
+
+    pprint(st.GENERATE_DATA_DICT, sort_dicts=False)
+
+    print('----------------------------------------------------------')
+
+
+'''
+■ 生成結果プレビューをプリントする関数
+'''
+def print_relust(raw):
+    raw_list = raw.splitlines()
+
+    print('\n▼ 生成結果プレビュー')
+    print('----------------------------------------------------------')
+
+    # 7行（6行生成）を超過している場合は最初と最後の3行分のみ出力
+    if len(raw_list) > 7:
+        print(raw_list[0]) # ヘッダー
+        print(raw_list[1])
+        print(raw_list[2])
+        print(raw_list[3])
+        print('\n...\n')
+        print(raw_list[-3])
+        print(raw_list[-2])
+        print(raw_list[-1])
+    else:
+        print(raw.rstrip())
+
+    print('----------------------------------------------------------\n')
 
 
 '''

@@ -2,40 +2,16 @@
 GenerateDummyData.py / メイン処理
 
 '''''''''''''''''''''''''''''''''''''''
-
-from pprint import pprint
-
-import settings as st
 import utils as ut
 
-print('\n')
+print('')
 print('=========================')
 print('   Generate Dummy Data   ')
 print('=========================')
 
 try:
-
-    # 設定の表示
-    print('\n▼ 生成設定')
-    print('----------------------------------------------------------')
-
-    print(f'生成行数       : {st.GENERATE_ROWS_NUM} 行')
-    print(f'値の言語設定   : {st.LANGUAGE}')
-
-    seed_setting = st.SEED if st.SEED else '設定なし'
-    print(f'シード値の設定 : {seed_setting}')
-
-    print('----------------------------------------------------------')
-
-    print(f'\n▼生成するダミーデータの設定')
-    print('----------------------------------------------------------')
-
-    pprint(st.GENERATE_DATA_DICT, sort_dicts=False)
-
-    print('----------------------------------------------------------')
-
-
-
+    # 生成設定をプリント
+    ut.print_settings()
 
     print('\n上記の設定でダミーデータを生成します。')
     print('問題なければ Enter キーを送信してください。')
@@ -52,25 +28,9 @@ try:
 
     # ダミーデータを生成
     raw = ut.generate_dummy_raw()
-    raw_list = raw.splitlines()
 
-    print('\n▼ 生成結果プレビュー')
-    print('----------------------------------------------------------')
-
-    # 7行（6行生成）を超過している場合は最初と最後の3行分のみ出力
-    if len(raw_list) > 7:
-        print(raw_list[0]) # ヘッダー
-        print(raw_list[1])
-        print(raw_list[2])
-        print(raw_list[3])
-        print('\n...\n')
-        print(raw_list[-3])
-        print(raw_list[-2])
-        print(raw_list[-1])
-    else:
-        print(raw.rstrip())
-
-    print('----------------------------------------------------------\n')
+    # 生成結果プレビューをプリント
+    ut.print_relust(raw)
 
     # CSV ファイルとして出力
     with open(export_file_path, 'w', newline='', encoding='utf-8') as f:
