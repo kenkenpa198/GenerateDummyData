@@ -3,6 +3,8 @@ GenerateDummyData.py / メイン処理
 
 '''''''''''''''''''''''''''''''''''''''
 
+from pprint import pprint
+
 import settings as st
 import utils as ut
 
@@ -14,18 +16,26 @@ print('=========================')
 try:
 
     # 設定の表示
-    print('\n▼ 生成設定一覧')
-    print('----------------------------------------------------------\n')
+    print('\n▼ 生成設定')
+    print('----------------------------------------------------------')
 
-    print(f'生成行数       : {st.GENERATE_ROWS_NUM}')
-    print(f'ヘッダーの設定 : {st.HEADER}')
-    print(f'値の設定       : {st.DATA_COLUMNS}')
+    print(f'生成行数       : {st.GENERATE_ROWS_NUM} 行')
     print(f'値の言語設定   : {st.LANGUAGE}')
 
     seed_setting = st.SEED if st.SEED else '設定なし'
     print(f'シード値の設定 : {seed_setting}')
 
-    print('\n----------------------------------------------------------')
+    print('----------------------------------------------------------')
+
+    print(f'\n▼生成するダミーデータの設定')
+    print('----------------------------------------------------------')
+
+    pprint(st.GENERATE_DATA_DICT, sort_dicts=False)
+
+    print('----------------------------------------------------------')
+
+
+
 
     print('\n上記の設定でダミーデータを生成します。')
     print('問題なければ Enter キーを送信してください。')
@@ -45,7 +55,7 @@ try:
     raw_list = raw.splitlines()
 
     print('\n▼ 生成結果プレビュー')
-    print('----------------------------------------------------------\n')
+    print('----------------------------------------------------------')
 
     # 7行（6行生成）を超過している場合は最初と最後の3行分のみ出力
     if len(raw_list) > 7:
@@ -56,9 +66,9 @@ try:
         print('\n...\n')
         print(raw_list[-3])
         print(raw_list[-2])
-        print(raw_list[-1] + '\n')
+        print(raw_list[-1])
     else:
-        print(raw)
+        print(raw.rstrip())
 
     print('----------------------------------------------------------\n')
 

@@ -79,10 +79,14 @@ def generate_dummy_raw():
     # ダミーデータのローカライズを設定
     fake = Faker(st.LANGUAGE)
 
+    # ダミーデータ辞書のキーと値をヘッダーのリストと値のリストに変換
+    header = list(st.GENERATE_DATA_DICT.keys())
+    data_columns = list(st.GENERATE_DATA_DICT.values())
+
     # ダミーデータの raw テキストを生成
     raw_text = fake.csv(
-        header=st.HEADER,              # ヘッダー設定を読み込み
-        data_columns=st.DATA_COLUMNS,  # 値のオプション設定を読み込み
+        header=header,                 # ヘッダー設定を読み込み
+        data_columns=data_columns,     # 値のオプション設定を読み込み
         num_rows=st.GENERATE_ROWS_NUM, # 生成行数設定を読み込み
         include_row_ids=False          # 重複を許可しない設定（たぶん…）
     )
