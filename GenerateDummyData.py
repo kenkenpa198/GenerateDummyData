@@ -17,10 +17,13 @@ try:
     print('\n▼ 生成設定一覧')
     print('----------------------------------------------------------\n')
 
-    print(f'生成行数       : {st.TOTAL_ROWS_NUM}')
+    print(f'生成行数       : {st.GENERATE_ROWS_NUM}')
     print(f'ヘッダーの設定 : {st.HEADER}')
     print(f'値の設定       : {st.DATA_COLUMNS}')
     print(f'値の言語設定   : {st.LANGUAGE}')
+
+    seed_setting = st.SEED if st.SEED else '設定なし'
+    print(f'シード値の設定 : {seed_setting}')
 
     print('\n----------------------------------------------------------')
 
@@ -34,13 +37,29 @@ try:
     # python の実行ファイルと同階層の export フォルダへ出力する
     export_file_path = ut.make_export_file_path(ut.make_export_dir_path())
 
-    # ダミーデータを生成
+    # 生成時間が長い場合に安心させるため生成中であることを示すテキストを表示
     print('\nダミーデータを生成しています……')
-    raw = ut.generate_dummy_raw()
 
-    print('\n▼ 生成結果')
+    # ダミーデータを生成
+    raw = ut.generate_dummy_raw()
+    raw_list = raw.splitlines()
+
+    print('\n▼ 生成結果プレビュー')
     print('----------------------------------------------------------\n')
-    print(raw)
+
+    # 7行（6行生成）を超過している場合は最初と最後の3行分のみ出力
+    if len(raw_list) > 7:
+        print(raw_list[0]) # ヘッダー
+        print(raw_list[1])
+        print(raw_list[2])
+        print(raw_list[3])
+        print('\n...\n')
+        print(raw_list[-3])
+        print(raw_list[-2])
+        print(raw_list[-1] + '\n')
+    else:
+        print(raw)
+
     print('----------------------------------------------------------\n')
 
     # CSV ファイルとして出力

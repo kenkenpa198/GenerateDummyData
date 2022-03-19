@@ -72,16 +72,19 @@ def generate_dummy_raw():
     Faker = Factory.create
     fake = Faker()
 
-    # 生成の設定
-    # fake.seed(0)            # シード値をここで指定すると生成されるデータを固定できる
-    fake = Faker(st.LANGUAGE) # ダミーデータのローカライズを設定
+    # setting.py へ SEED の設定がされていればシード値を設定する
+    if st.SEED:
+        fake.seed(st.SEED)
+
+    # ダミーデータのローカライズを設定
+    fake = Faker(st.LANGUAGE)
 
     # ダミーデータの raw テキストを生成
     raw_text = fake.csv(
-        header=st.HEADER,             # ヘッダー設定を読み込み
-        data_columns=st.DATA_COLUMNS, # 値のオプション設定を読み込み
-        num_rows=st.TOTAL_ROWS_NUM,   # 生成行数設定を読み込み
-        include_row_ids=False         # 重複を許可しない設定（たぶん…）
+        header=st.HEADER,              # ヘッダー設定を読み込み
+        data_columns=st.DATA_COLUMNS,  # 値のオプション設定を読み込み
+        num_rows=st.GENERATE_ROWS_NUM, # 生成行数設定を読み込み
+        include_row_ids=False          # 重複を許可しない設定（たぶん…）
     )
 
     return raw_text
