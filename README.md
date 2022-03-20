@@ -151,7 +151,7 @@ color_name   | カラーコード（色名）。色系は他にも hex_color（H
 \* date      | 日付（YYYY-MM-DD 形式） 。                                  | 2014-11-17
 \* date_time | 日付時刻（YYYY-MM-DD hh:mm:ss 形式）。                      | 1993-02-19 01:48:57
 \* email     | Email アドレス。ドメインはすべて @ なしの example.xxx になります。 | zyoshidaexample.com
-file_path    | ファイルパス。日本語設定だと無駄に日本語化されてしまうようなので、後述の言語設定を切り替えた方が使いやすそう。 | /状況/スマッシュ.webm
+file_path    | ファイルパス。日本語設定だと無駄に日本語化されてしまうようなので、前述の言語設定を切り替えた方が使いやすそう。 | /状況/スマッシュ.webm
 first_name   | 下の名前。name 系には他にもカタカナ版、英語版、男性っぽい / 女性っぽい などいろいろあるようです。 | 亮介
 image_url    | 画像 URL 。実際に遷移できるようです。                       | [https://placekitten.com/680/409](https://placekitten.com/680/409)
 job          | 職業。                                                      | 野球
