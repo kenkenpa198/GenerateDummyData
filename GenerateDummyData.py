@@ -6,7 +6,7 @@ import utils as ut
 
 print('')
 print('=========================')
-print('   Generate Dummy Data   ')
+print('    GenerateDummyData    ')
 print('=========================')
 
 try:
@@ -53,4 +53,4 @@ try:
 except KeyboardInterrupt:
     print('\nキーボード入力により処理を中断しました。')
 
-print('\nGenerate Dummy Data を終了します。\n')
+print('\nGenerateDummyData を終了します。\n')

@@ -1,4 +1,4 @@
-export/
+export/*
 
 # 設定ファイルサンプルの ignore 設定
 # 開発時の設定ファイルは除外しつつ sample.json のみ管理対象にする
