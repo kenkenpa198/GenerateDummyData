@@ -3,11 +3,55 @@ utils.py / 自作モジュール
 
 '''''''''''''''''''''''''''''''''''''''
 import datetime
+import glob
 import json
 import os
 from pprint import pprint
+import sys
 
 from faker.factory import Factory
+
+
+'''
+■ 設定ファイルパスのリストを取得する関数
+'''
+def get_setting_file_path_list():
+
+    # 設定ファイル用ディレクトリ内のファイルパスのみを再帰的に取得しリスト化する
+    setting_file_path_list = [p for p in glob.glob('settings/**/*.json', recursive=True)
+       if os.path.isfile(p)]
+
+    # 設定ファイルパスのリストを昇順に並び替えて返す
+    setting_file_path_list.sort()
+    return setting_file_path_list
+
+
+
+'''
+■ 設定ファイルパスリストの情報を表示して選択を要求する関数
+'''
+def request_select_file_path_list(setting_file_path_list):
+
+    # 設定ファイルパスリストを index 番号と共にプリント
+    index_num = 0
+    for fp in setting_file_path_list:
+        print(f'{index_num} : {fp}')
+        index_num += 1
+
+    # 入力を要求する
+    selected_index_num = int(input('\n読み込む設定ファイルの INDEX 番号を入力してください: '))
+
+    # 入力された index 番号からファイルパスを取得して変数へ格納
+    selected_setting_file_path = setting_file_path_list[selected_index_num]
+
+    # 情報を表示する
+    print('\n以下のファイルを読み込みます。問題なければ Enter キーを押してください。')
+    print(selected_setting_file_path)
+    input()
+
+    # 設定ファイルパスを返す
+    return selected_setting_file_path
+
 
 
 '''
@@ -23,29 +67,52 @@ from faker.factory import Factory
 '''
 def import_json(json_file_path):
 
-    # 設定用の JSON ファイルを読み込み
-    with open(json_file_path, 'r', encoding='utf-8') as f:
-        json_dict = json.load(f)
+    try:
+        # 設定用の JSON ファイルを読み込み
+        with open(json_file_path, 'r', encoding='utf-8') as f:
+            json_dict = json.load(f)
 
-    # 読み込んだ設定を変数と辞書へ格納
-    generate_rows_num        = json_dict["generate_rows_num"]
-    faker_language           = json_dict["faker_language"]
-    seed_value               = json_dict["seed_value"]
-    generate_dummy_data_dict = json_dict["generate_dummy_data_dict"]
+        # 読み込んだ設定を変数と辞書へ格納
+        generate_rows_num        = json_dict["generate_rows_num"]
+        faker_language           = json_dict["faker_language"]
+        seed_value               = json_dict["seed_value"]
+        generate_dummy_data_dict = json_dict["generate_dummy_data_dict"]
 
-    # 設定値を返す
-    return (
-        generate_rows_num,
-        faker_language,
-        seed_value,
-        generate_dummy_data_dict
-    )
+    # 例外処理: JSON のデコードエラーをキャッチしたとき
+    except json.decoder.JSONDecodeError as e:
+        print('[!] JSON 情報のデコードに失敗しました。JSON ファイルの記述に問題がないか確認してください。')
+        print(f'    json.decoder.JSONDecodeError: {e}')
+        print('\nツールの実行を終了します。')
+        sys.exit( )
+
+    # 例外処理: 存在しない辞書のキーを参照しているエラーをキャッチしたとき
+    except KeyError as e:
+        print('[!] 設定値の取得に失敗しました。下記に表示されている設定値の記述に問題がないか確認してください。')
+        print(f'    KeyError: {e}')
+        print('\nツールの実行を終了します。')
+        sys.exit( )
+
+    # 例外が発生しなければ設定値を返す
+    else:
+
+        print('設定情報の読み込みに成功しました。')
+
+        return (
+            generate_rows_num,
+            faker_language,
+            seed_value,
+            generate_dummy_data_dict
+        )
+
 
 
 '''
 ■ 生成設定をプリントする関数
 '''
 def print_settings(generate_rows_num, faker_language, seed_value, generate_data_dict):
+
+    input('Enter キーを押すと生成の設定を表示します。')
+
     print('\n▼ 生成時の設定')
     print('----------------------------------------------------------')
 
@@ -57,7 +124,7 @@ def print_settings(generate_rows_num, faker_language, seed_value, generate_data_
 
     print('----------------------------------------------------------')
 
-    print(f'\n▼生成するダミーデータの設定')
+    print(f'\n▼ 生成するダミーデータの設定')
     print('----------------------------------------------------------')
 
     pprint(generate_data_dict, sort_dicts=False)

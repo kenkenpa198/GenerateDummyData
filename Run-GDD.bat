@@ -12,5 +12,7 @@ chcp 65001
 :: ===== メイン処理 =====
 echo GenerateDummyData.py を実行します。
 python GenerateDummyData.py
+
+echo;
 echo 終了するには何らかのキーを押してください。
 pause
