@@ -3,25 +3,56 @@ utils.py / 自作モジュール
 
 '''''''''''''''''''''''''''''''''''''''
 import datetime
+import json
 import os
 from pprint import pprint
 
 from faker.factory import Factory
 
-import settings as st
+
+'''
+■ 設定用の JSON ファイルを読み込む関数
+
+下記の設定値をタプルとして返す。
+
+- generate_rows_num（生成行数設定）
+- faker_language（言語設定）
+- seed_value（シード値設定）
+- generate_dummy_data_dict（ダミーデータ生成用辞書設定）
+
+'''
+def import_json(json_file_path):
+
+    # 設定用の JSON ファイルを読み込み
+    with open(json_file_path, 'r', encoding='utf-8') as f:
+        json_dict = json.load(f)
+
+    # 読み込んだ設定を変数と辞書へ格納
+    generate_rows_num        = json_dict["generate_rows_num"]
+    faker_language           = json_dict["faker_language"]
+    seed_value               = json_dict["seed_value"]
+    generate_dummy_data_dict = json_dict["generate_dummy_data_dict"]
+
+    # 設定値を返す
+    return (
+        generate_rows_num,
+        faker_language,
+        seed_value,
+        generate_dummy_data_dict
+    )
 
 
 '''
 ■ 生成設定をプリントする関数
 '''
-def print_settings():
-    print('\n▼ 生成設定')
+def print_settings(generate_rows_num, faker_language, seed_value, generate_data_dict):
+    print('\n▼ 生成時の設定')
     print('----------------------------------------------------------')
 
-    print(f'生成行数       : {st.GENERATE_ROWS_NUM} 行')
-    print(f'値の言語設定   : {st.LANGUAGE}')
+    print(f'生成行数       : {generate_rows_num} 行')
+    print(f'値の言語設定   : {faker_language}')
 
-    seed_setting = st.SEED if st.SEED else '設定なし'
+    seed_setting = seed_value if seed_value else '設定なし'
     print(f'シード値の設定 : {seed_setting}')
 
     print('----------------------------------------------------------')
@@ -29,7 +60,7 @@ def print_settings():
     print(f'\n▼生成するダミーデータの設定')
     print('----------------------------------------------------------')
 
-    pprint(st.GENERATE_DATA_DICT, sort_dicts=False)
+    pprint(generate_data_dict, sort_dicts=False)
 
     print('----------------------------------------------------------')
 
@@ -115,29 +146,29 @@ https://faker.readthedocs.io/en/master/index.html
 https://faker.readthedocs.io/en/master/providers/faker.providers.misc.html?highlight=csv#faker.providers.misc.Provider.csv
 
 '''
-def generate_dummy_raw():
+def generate_dummy_data_raw(generate_rows_num, faker_language, seed_value, generate_data_dict):
 
     # クラスと関数を変数へ格納
     Faker = Factory.create
-    fake = Faker()
+    fake  = Faker()
 
     # setting.py へ SEED の設定がされていればシード値を設定する
-    if st.SEED:
-        fake.seed(st.SEED)
+    if seed_value:
+        fake.seed(seed_value)
 
-    # ダミーデータのローカライズを設定
-    fake = Faker(st.LANGUAGE)
+    # faker の言語を設定
+    fake = Faker(faker_language)
 
     # ダミーデータ辞書のキーと値をヘッダーのリストと値のリストに変換
-    header = list(st.GENERATE_DATA_DICT.keys())
-    data_columns = list(st.GENERATE_DATA_DICT.values())
+    header = list(generate_data_dict.keys())
+    data_columns = list(generate_data_dict.values())
 
     # ダミーデータの raw テキストを生成
     raw_text = fake.csv(
-        header=header,                 # ヘッダー設定を読み込み
-        data_columns=data_columns,     # 値のオプション設定を読み込み
-        num_rows=st.GENERATE_ROWS_NUM, # 生成行数設定を読み込み
-        include_row_ids=False          # 重複を許可しない設定（たぶん…）
+        header=header,              # ヘッダー設定を読み込み
+        data_columns=data_columns,  # 値のオプション設定を読み込み
+        num_rows=generate_rows_num, # 生成行数設定を読み込み
+        include_row_ids=False       # 重複を許可しない設定（たぶん…）
     )
 
     return raw_text

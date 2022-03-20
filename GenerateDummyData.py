@@ -10,8 +10,11 @@ print('   Generate Dummy Data   ')
 print('=========================')
 
 try:
+    # 設定ファイルから設定値を読み込んでタプルとして格納
+    setting_tuple = ut.import_json('settings/sample.json')
+
     # 生成設定をプリント
-    ut.print_settings()
+    ut.print_settings(*setting_tuple)
 
     print('\n上記の設定でダミーデータを生成します。')
     print('問題なければ Enter キーを送信してください。')
@@ -27,7 +30,7 @@ try:
     print('\nダミーデータを生成しています……')
 
     # ダミーデータを生成
-    raw = ut.generate_dummy_raw()
+    raw = ut.generate_dummy_data_raw(*setting_tuple)
 
     # 生成結果プレビューをプリント
     ut.print_relust(raw)
