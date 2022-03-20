@@ -32,25 +32,44 @@ def get_setting_file_path_list():
 '''
 def request_select_file_path_list(setting_file_path_list):
 
-    # 設定ファイルパスリストを index 番号と共にプリント
-    index_num = 0
-    for fp in setting_file_path_list:
-        print(f'{index_num} : {fp}')
-        index_num += 1
+    try:
+        # 設定ファイルパスリストを INDEX 番号と共にプリント
+        index_num = 0
+        for fp in setting_file_path_list:
+            print(f'{index_num} : {fp}')
+            index_num += 1
 
-    # 入力を要求する
-    selected_index_num = int(input('\n読み込む設定ファイルの INDEX 番号を入力してください: '))
+        # 入力を要求する
+        selected_index_num = int(input('\n読み込みたい設定ファイルに表示されている INDEX 番号を入力してください: '))
 
-    # 入力された index 番号からファイルパスを取得して変数へ格納
-    selected_setting_file_path = setting_file_path_list[selected_index_num]
+        # 入力された INDEX 番号からファイルパスを取得して変数へ格納
+        selected_setting_file_path = setting_file_path_list[selected_index_num]
 
-    # 情報を表示する
-    print('\n以下のファイルを読み込みます。問題なければ Enter キーを押してください。')
-    print(selected_setting_file_path)
-    input()
+    # TODO: 例外があった場合は終了するのではなく繰り返し要求するようにする
 
-    # 設定ファイルパスを返す
-    return selected_setting_file_path
+    # 例外処理: 値エラーをキャッチしたとき
+    except ValueError as e:
+        print('\n[!] 値エラーを検知しました。入力した値が半角の数値であるか確認してください。')
+        print(f'    ValueError: {e}')
+        print('\nツールの実行を終了します。')
+        sys.exit()
+
+    # 例外処理: INDEX エラーをキャッチしたとき
+    except IndexError as e:
+        print('\n[!] INDEX エラーを検知しました。入力した値がリストに表示されている数値だったか確認してください。')
+        print(f'    IndexError: {e}')
+        print('\nツールの実行を終了します。')
+        sys.exit()
+
+    # 例外が発生しなければ入力されたファイルパスを返す
+    else:
+        # 情報を表示する
+        print('\n以下のファイルを読み込みます。問題なければ Enter キーを押してください。')
+        print(selected_setting_file_path)
+        input()
+
+        # 設定ファイルパスを返す
+        return selected_setting_file_path
 
 
 
@@ -68,7 +87,7 @@ def request_select_file_path_list(setting_file_path_list):
 def import_json(json_file_path):
 
     try:
-        # 設定用の JSON ファイルを読み込み
+        # 引数で渡された設定用の JSON ファイルを読み込み
         with open(json_file_path, 'r', encoding='utf-8') as f:
             json_dict = json.load(f)
 
@@ -83,14 +102,14 @@ def import_json(json_file_path):
         print('[!] JSON 情報のデコードに失敗しました。JSON ファイルの記述に問題がないか確認してください。')
         print(f'    json.decoder.JSONDecodeError: {e}')
         print('\nツールの実行を終了します。')
-        sys.exit( )
+        sys.exit()
 
     # 例外処理: 存在しない辞書のキーを参照しているエラーをキャッチしたとき
     except KeyError as e:
         print('[!] 設定値の取得に失敗しました。下記に表示されている設定値の記述に問題がないか確認してください。')
         print(f'    KeyError: {e}')
         print('\nツールの実行を終了します。')
-        sys.exit( )
+        sys.exit()
 
     # 例外が発生しなければ設定値を返す
     else:
