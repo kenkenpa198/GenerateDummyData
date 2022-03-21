@@ -25,7 +25,7 @@ GenerateDummyData は、ランダムなダミーデータを生成して CSV 形
 ## 2. 検証環境
 
 - Windows 11 バージョン 21H2
-- WSL2 - Ubuntu 20.04.4
+- WSL2（Ubuntu 20.04.4）
 - MacOS Monterey 12.3（Apple M1）
 
 ## 3. 導入方法
