@@ -131,7 +131,12 @@ def import_json(json_file_path):
 '''
 ■ 生成設定をプリントする関数
 '''
-def print_settings(generate_rows_num, faker_language, seed_value, remove_wqm_flag, generate_data_dict):
+def print_settings(setting_file, generate_rows_num, faker_language, seed_value, remove_wqm_flag, generate_data_dict):
+
+    print('\n▼ 設定ファイル')
+    print('----------------------------------------------------------')
+    print(f'{setting_file}')
+    print('----------------------------------------------------------')
 
     print('\n▼ 生成時の設定')
     print('----------------------------------------------------------')

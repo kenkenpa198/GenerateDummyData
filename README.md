@@ -127,7 +127,7 @@ Python とモジュールのインストールまで完了したら、下記の�
 サンプルの設定は `""`（設定なし）です。  
 この場合は生成の度に違うダミーデータが生成されます。
 
-### 5.3. remove_wqm（ダブルクォーテーションの削除設定）
+### 5.4. remove_wqm（ダブルクォーテーションの削除設定）
 
 当ツールで出力する CSV の値にはダブルクォーテーション `""` が付与されているのがデフォルトですが、  
 `remove_wqm` へ `True` を設定すると、ダブルクォーテーションを削除して出力します。
@@ -137,7 +137,7 @@ CSV の利用先によってはダブルクォーテーションが無い方が�
 サンプルの設定は `False`（削除しない）です。  
 この場合、前述のとおりダブルクォーテーションが付与されたまま CSV を出力します。
 
-### 5.4. generate_dummy_data_dict（ダミーデータ生成用の辞書設定）
+### 5.5. generate_dummy_data_dict（ダミーデータ生成用の辞書設定）
 
 `generate_dummy_data_dict` の左辺と右辺へ設定された値を基にダミーデータを生成します。  
 当ツールのメインとなる設定です。
@@ -206,19 +206,23 @@ time          | 時間（hh:mm:ss 形式）。                                  
   - 言語設定を日本語にした際に、オプションごとにどう表示が変わるかまで掲載されているリストです。
   - ただし中途半端にしか掲載されていないようなので、前述の標準のオプションリストを確認する方がいいかも。
 
-## 7. ライセンス
+## 7. その他メモ
+
+- 改行コードは `CRLF`（`\r\n`）で出力されます。
+
+## 8. ライセンス
 
 GenerateDummyData は MIT ライセンスの下でリリースされています。  
 ライセンス全文はディレクトリ直下の LICENSE ファイルをご確認ください。
 
-## 8. クレジット
+## 9. クレジット
 
-### 8.1. 利用ソフトウェア
+### 9.1. 利用ソフトウェア
 
 - [Python](https://www.python.org/)
 - [joke2k/faker](https://github.com/joke2k/faker)
 
-### 8.2. 参考サイト様
+### 9.2. 参考サイト様
 
 - [Welcome to Faker's documentation! — Faker 13.3.2 documentation](https://faker.readthedocs.io/en/master/index.html)
 - [Pythonでそれっぽいテストデータを作成する(前編) - Qiita](https://qiita.com/nandymak/items/1ab36e3d5365e8ca2942)
@@ -226,6 +230,6 @@ GenerateDummyData は MIT ライセンスの下でリリースされています
 - [【Python】CSVファイルのダミーデータを作成する方法](https://gist.github.com/kurozumi/4642d8a70440c57a2719c0e5c02013c5)
 - [[Laravel5.1]Fakerチートシート - Qiita](https://qiita.com/tosite0345/items/1d47961947a6770053af)
 
-### 8.3. その他
+### 9.3. その他
 
 - [サクラエディタ](https://sakura-editor.github.io/)（README の一部画像で使用させていただいています）
