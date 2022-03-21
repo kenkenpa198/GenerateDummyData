@@ -18,12 +18,12 @@ try:
     setting_file_path = ut.request_select_file_path_list(setting_file_path_list)
 
     # 設定ファイルから設定値を読み込んでそれぞれの設定値の変数へ格納
-    generate_rows_num, faker_language, seed_value, remove_wqm, generate_data_dict = ut.import_json(setting_file_path)
+    generate_rows_num, faker_language, seed_value, add_wqm, generate_data_dict = ut.import_json(setting_file_path)
 
     print('\n設定ファイルの読み込みに成功しました。設定内容を表示します。')
 
     # 読み込んだ生成設定をプリント
-    ut.print_settings(setting_file_path, generate_rows_num, faker_language, seed_value, remove_wqm, generate_data_dict)
+    ut.print_settings(setting_file_path, generate_rows_num, faker_language, seed_value, add_wqm, generate_data_dict)
 
     print('\n上記の設定でダミーデータを生成します。')
     print('問題なければ Enter キーを押してください。')
@@ -39,13 +39,12 @@ try:
     # 生成時間が長い場合に備えて生成中であることを示すテキストを表示
     print('\nダミーデータを生成しています……。')
     raw = ut.generate_dummy_data_raw(generate_rows_num, faker_language, seed_value, generate_data_dict)
-    print('ダミーデータを生成しました。')
 
-    # remove_wqm の設定が TRUE であれば " " の削除関数を実行する
-    if remove_wqm:
-        print('\n" " を削除しています……。')
+    # add_wqm の設定が False であれば " " の削除関数を実行する
+    if not add_wqm:
         raw = ut.remove_wqm(raw)
-        print('" " を削除しました。')
+
+    print('ダミーデータを生成しました。')
 
     # 生成結果プレビューをプリント
     ut.print_relust(raw)

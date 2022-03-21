@@ -99,7 +99,7 @@ def import_json(json_file_path):
         generate_rows_num        = json_dict["generate_rows_num"]
         faker_language           = json_dict["faker_language"]
         seed_value               = json_dict["seed_value"]
-        remove_wqm_flag          = du.strtobool(json_dict["remove_wqm"]) # Bool 型へ変換
+        add_wqm_flag          = du.strtobool(json_dict["add_wqm"]) # Bool 型へ変換
         generate_dummy_data_dict = json_dict["generate_dummy_data_dict"]
 
     # 例外処理: JSON のデコードエラーをキャッチしたとき
@@ -122,7 +122,7 @@ def import_json(json_file_path):
             generate_rows_num,
             faker_language,
             seed_value,
-            remove_wqm_flag,
+            add_wqm_flag,
             generate_dummy_data_dict
         )
 
@@ -131,7 +131,7 @@ def import_json(json_file_path):
 '''
 ■ 生成設定をプリントする関数
 '''
-def print_settings(setting_file, generate_rows_num, faker_language, seed_value, remove_wqm_flag, generate_data_dict):
+def print_settings(setting_file, generate_rows_num, faker_language, seed_value, add_wqm_flag, generate_data_dict):
 
     print('\n▼ 設定ファイル')
     print('----------------------------------------------------------')
@@ -147,8 +147,8 @@ def print_settings(setting_file, generate_rows_num, faker_language, seed_value, 
     seed_setting_text = seed_value if seed_value else '設定なし'
     print(f'シード値の設定 : {seed_setting_text}')
 
-    remove_wqm_setting_text = "除去する" if remove_wqm_flag else '除去しない'
-    print(f'" " の除去     : {remove_wqm_setting_text}')
+    add_wqm_setting_text = "付与する" if add_wqm_flag else '付与しない'
+    print(f'" " の付与     : {add_wqm_setting_text}')
 
     print('----------------------------------------------------------')
 

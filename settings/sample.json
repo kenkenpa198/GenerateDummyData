@@ -2,7 +2,7 @@
     "generate_rows_num": 100,
     "faker_language"   : "ja_JP",
     "seed_value"       : "",
-    "remove_wqm"       : "False",
+    "add_wqm"          : "False",
     "generate_dummy_data_dict": {
         "member_id"        : "TEST_{{user_name}}",
         "member_name"      : "テスト_{{name}}",
