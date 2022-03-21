@@ -3,33 +3,149 @@ utils.py / 自作モジュール
 
 '''''''''''''''''''''''''''''''''''''''
 import datetime
+import glob
+import json
 import os
 from pprint import pprint
+import traceback
+import sys
 
 from faker.factory import Factory
 
-import settings as st
+
+'''
+■ 設定ファイルパスのリストを取得する関数
+'''
+def get_setting_file_path_list():
+
+    # 設定ファイル用ディレクトリ内のファイルパスのみを再帰的に取得しリスト化する
+    setting_file_path_list = [p for p in glob.glob('settings/**/*.json', recursive=True)
+       if os.path.isfile(p)]
+
+    # 設定ファイルパスのリストを昇順に並び替えて返す
+    setting_file_path_list.sort()
+    return setting_file_path_list
+
+
+
+
+'''
+■ 設定ファイルパスリストの情報を表示して選択を要求する関数
+'''
+def request_select_file_path_list(setting_file_path_list):
+
+    # 渡されたリストが値なしであればメッセージを返して終了する
+    if not setting_file_path_list:
+        print('\n[!] 設定ファイルのリストを取得できませんでした。')
+        print('    GenerateDummyData.py と同階層に settings フォルダがあることや\n    settings フォルダの中に JSON ファイルが存在することを確認してください。')
+        print('\nツールの実行を終了します。')
+        sys.exit()
+
+    # 設定ファイルパスリストを INDEX 番号と共にプリント
+    index_num = 0
+    for fp in setting_file_path_list:
+        print(f'{index_num} : {fp}')
+        index_num += 1
+
+    while True:
+
+        try:
+            # 入力を要求する
+            selected_index_num = int(input('\n読み込みたい設定ファイルの INDEX 番号を入力してください: '))
+
+            # 入力された INDEX 番号からファイルパスを取得して変数へ格納
+            selected_setting_file_path = setting_file_path_list[selected_index_num]
+
+        # 例外処理: 値エラーをキャッチしたとき
+        except ValueError as e:
+            print('\n[!] 値エラーを検知しました。入力した値が半角の数値であるか確認してください。')
+            print(f'    ValueError: {e}')
+            continue
+
+        # 例外処理: INDEX エラーをキャッチしたとき
+        except IndexError as e:
+            print('\n[!] INDEX エラーを検知しました。リストに表示されている数値か確認してください。')
+            print(f'    IndexError: {e}')
+            continue
+
+        # 正常な値が取得できたら抜ける
+        else:
+            break
+
+    # 設定ファイルパスを返す
+    return selected_setting_file_path
+
+
+
+'''
+■ 設定用の JSON ファイルを読み込む関数
+
+下記の設定値をタプルとして返す。
+
+- generate_rows_num（生成行数設定）
+- faker_language（言語設定）
+- seed_value（シード値設定）
+- generate_dummy_data_dict（ダミーデータ生成用辞書設定）
+
+'''
+def import_json(json_file_path):
+
+    try:
+        # 引数で渡された設定用の JSON ファイルを読み込み
+        with open(json_file_path, 'r', encoding='utf-8') as f:
+            json_dict = json.load(f)
+
+        # 読み込んだ設定を変数と辞書へ格納
+        generate_rows_num        = json_dict["generate_rows_num"]
+        faker_language           = json_dict["faker_language"]
+        seed_value               = json_dict["seed_value"]
+        generate_dummy_data_dict = json_dict["generate_dummy_data_dict"]
+
+    # 例外処理: JSON のデコードエラーをキャッチしたとき
+    except json.decoder.JSONDecodeError as e:
+        print('\n[!] JSON 情報のデコードに失敗しました。JSON ファイルの記述に問題がないか確認してください。')
+        print(f'    json.decoder.JSONDecodeError: {e}')
+        print('\nツールの実行を終了します。')
+        sys.exit()
+
+    # 例外処理: 存在しない辞書のキーを参照しているエラーをキャッチしたとき
+    except KeyError as e:
+        print('\n[!] 設定値の取得に失敗しました。下記に表示されている設定値の記述に問題がないか確認してください。')
+        print(f'    KeyError: {e}')
+        print('\nツールの実行を終了します。')
+        sys.exit()
+
+    # 例外が発生しなければ設定値を返す
+    else:
+        return (
+            generate_rows_num,
+            faker_language,
+            seed_value,
+            generate_dummy_data_dict
+        )
+
 
 
 '''
 ■ 生成設定をプリントする関数
 '''
-def print_settings():
-    print('\n▼ 生成設定')
+def print_settings(generate_rows_num, faker_language, seed_value, generate_data_dict):
+
+    print('\n▼ 生成時の設定')
     print('----------------------------------------------------------')
 
-    print(f'生成行数       : {st.GENERATE_ROWS_NUM} 行')
-    print(f'値の言語設定   : {st.LANGUAGE}')
+    print(f'生成行数       : {generate_rows_num} 行')
+    print(f'値の言語設定   : {faker_language}')
 
-    seed_setting = st.SEED if st.SEED else '設定なし'
+    seed_setting = seed_value if seed_value else '設定なし'
     print(f'シード値の設定 : {seed_setting}')
 
     print('----------------------------------------------------------')
 
-    print(f'\n▼生成するダミーデータの設定')
+    print(f'\n▼ 生成するダミーデータの設定')
     print('----------------------------------------------------------')
 
-    pprint(st.GENERATE_DATA_DICT, sort_dicts=False)
+    pprint(generate_data_dict, sort_dicts=False)
 
     print('----------------------------------------------------------')
 
@@ -115,29 +231,37 @@ https://faker.readthedocs.io/en/master/index.html
 https://faker.readthedocs.io/en/master/providers/faker.providers.misc.html?highlight=csv#faker.providers.misc.Provider.csv
 
 '''
-def generate_dummy_raw():
+def generate_dummy_data_raw(generate_rows_num, faker_language, seed_value, generate_data_dict):
 
     # クラスと関数を変数へ格納
     Faker = Factory.create
-    fake = Faker()
+    fake  = Faker()
 
-    # setting.py へ SEED の設定がされていればシード値を設定する
-    if st.SEED:
-        fake.seed(st.SEED)
+    try:
 
-    # ダミーデータのローカライズを設定
-    fake = Faker(st.LANGUAGE)
+        # setting.py へ SEED の設定がされていればシード値を設定する
+        if seed_value:
+            fake.seed(seed_value)
 
-    # ダミーデータ辞書のキーと値をヘッダーのリストと値のリストに変換
-    header = list(st.GENERATE_DATA_DICT.keys())
-    data_columns = list(st.GENERATE_DATA_DICT.values())
+        # faker の言語を設定
+        fake = Faker(faker_language)
 
-    # ダミーデータの raw テキストを生成
-    raw_text = fake.csv(
-        header=header,                 # ヘッダー設定を読み込み
-        data_columns=data_columns,     # 値のオプション設定を読み込み
-        num_rows=st.GENERATE_ROWS_NUM, # 生成行数設定を読み込み
-        include_row_ids=False          # 重複を許可しない設定（たぶん…）
-    )
+        # ダミーデータ辞書のキーと値をヘッダーのリストと値のリストに変換
+        header = list(generate_data_dict.keys())
+        data_columns = list(generate_data_dict.values())
+
+        # ダミーデータの raw テキストを生成
+        raw_text = fake.csv(
+            header=header,              # ヘッダー設定を読み込み
+            data_columns=data_columns,  # 値のオプション設定を読み込み
+            num_rows=generate_rows_num, # 生成行数設定を読み込み
+            include_row_ids=False       # 重複を許可しない設定（たぶん…）
+        )
+
+    except Exception:
+        print('\n[!] 生成の際にエラーが発生しました。\n    エラー情報を確認して設定ファイルを修正してください。')
+        print(f'\n{traceback.format_exc()}')
+        print('\nツールの実行を終了します。')
+        sys.exit()
 
     return raw_text
