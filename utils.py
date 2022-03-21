@@ -3,10 +3,12 @@ utils.py / 自作モジュール
 
 '''''''''''''''''''''''''''''''''''''''
 import datetime
+import distutils.util as du
 import glob
 import json
 import os
 from pprint import pprint
+import re
 import traceback
 import sys
 
@@ -25,8 +27,6 @@ def get_setting_file_path_list():
     # 設定ファイルパスのリストを昇順に並び替えて返す
     setting_file_path_list.sort()
     return setting_file_path_list
-
-
 
 
 '''
@@ -99,6 +99,7 @@ def import_json(json_file_path):
         generate_rows_num        = json_dict["generate_rows_num"]
         faker_language           = json_dict["faker_language"]
         seed_value               = json_dict["seed_value"]
+        remove_wqm_flag          = du.strtobool(json_dict["remove_wqm"]) # Bool 型へ変換
         generate_dummy_data_dict = json_dict["generate_dummy_data_dict"]
 
     # 例外処理: JSON のデコードエラーをキャッチしたとき
@@ -121,6 +122,7 @@ def import_json(json_file_path):
             generate_rows_num,
             faker_language,
             seed_value,
+            remove_wqm_flag,
             generate_dummy_data_dict
         )
 
@@ -129,7 +131,12 @@ def import_json(json_file_path):
 '''
 ■ 生成設定をプリントする関数
 '''
-def print_settings(generate_rows_num, faker_language, seed_value, generate_data_dict):
+def print_settings(setting_file, generate_rows_num, faker_language, seed_value, remove_wqm_flag, generate_data_dict):
+
+    print('\n▼ 設定ファイル')
+    print('----------------------------------------------------------')
+    print(f'{setting_file}')
+    print('----------------------------------------------------------')
 
     print('\n▼ 生成時の設定')
     print('----------------------------------------------------------')
@@ -137,8 +144,11 @@ def print_settings(generate_rows_num, faker_language, seed_value, generate_data_
     print(f'生成行数       : {generate_rows_num} 行')
     print(f'値の言語設定   : {faker_language}')
 
-    seed_setting = seed_value if seed_value else '設定なし'
-    print(f'シード値の設定 : {seed_setting}')
+    seed_setting_text = seed_value if seed_value else '設定なし'
+    print(f'シード値の設定 : {seed_setting_text}')
+
+    remove_wqm_setting_text = "除去する" if remove_wqm_flag else '除去しない'
+    print(f'" " の除去     : {remove_wqm_setting_text}')
 
     print('----------------------------------------------------------')
 
@@ -255,7 +265,7 @@ def generate_dummy_data_raw(generate_rows_num, faker_language, seed_value, gener
             header=header,              # ヘッダー設定を読み込み
             data_columns=data_columns,  # 値のオプション設定を読み込み
             num_rows=generate_rows_num, # 生成行数設定を読み込み
-            include_row_ids=False       # 重複を許可しない設定（たぶん…）
+            include_row_ids=False       # 通常の形式で出力
         )
 
     except Exception:
@@ -265,3 +275,22 @@ def generate_dummy_data_raw(generate_rows_num, faker_language, seed_value, gener
         sys.exit()
 
     return raw_text
+
+
+'''
+■ ダブルクォーテーションを除去する関数
+'''
+def remove_wqm(csv_raw):
+
+    # 渡された CSV の raw 文字列を行ごとに分解
+    lines = csv_raw.splitlines()
+
+    # 1行ごとに「行頭の " 」「行末の " 」「カンマの両隣の " 」を削除してリストへ格納する
+    removed_wqm_lines = []
+    for l in lines:
+        removed_wqm_lines.append(re.sub('^\"|\"$', '', l).replace('\",\"', ','))
+    removed_wqm_lines.append('') # おしりに改行文字をつけたいので空文字を最後に付ける
+
+    # CRLF 区切りで再結合
+    removed_wqm_csv_raw = '\r\n'.join(removed_wqm_lines)
+    return removed_wqm_csv_raw

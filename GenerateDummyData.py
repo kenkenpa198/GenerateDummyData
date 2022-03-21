@@ -17,16 +17,13 @@ try:
     # 表示したリストから設定ファイルの選択を要求しファイルパスを取得
     setting_file_path = ut.request_select_file_path_list(setting_file_path_list)
 
-    # 読み込むファイルの情報を表示する
-    print('\n以下のファイルを読み込みます。続けるには Enter キーを押してください。')
-    input(setting_file_path)
+    # 設定ファイルから設定値を読み込んでそれぞれの設定値の変数へ格納
+    generate_rows_num, faker_language, seed_value, remove_wqm, generate_data_dict = ut.import_json(setting_file_path)
 
-    # 設定ファイルから設定値を読み込んでタプルとして格納
-    setting_tuple = ut.import_json(setting_file_path)
+    print('\n設定ファイルの読み込みに成功しました。設定内容を表示します。')
 
-    # 生成設定をプリント
-    input('\n設定情報の読み込みに成功しました。Enter キーを押すと生成の設定を表示します。')
-    ut.print_settings(*setting_tuple)
+    # 読み込んだ生成設定をプリント
+    ut.print_settings(setting_file_path, generate_rows_num, faker_language, seed_value, remove_wqm, generate_data_dict)
 
     print('\n上記の設定でダミーデータを生成します。')
     print('問題なければ Enter キーを押してください。')
@@ -38,11 +35,17 @@ try:
     # python の実行ファイルと同階層の export フォルダへ出力する
     export_file_path = ut.make_export_file_path(ut.make_export_dir_path())
 
-    # 生成時間が長い場合に備えて生成中であることを示すテキストを表示
-    print('\nダミーデータを生成しています……')
-
     # ダミーデータを生成するメイン処理
-    raw = ut.generate_dummy_data_raw(*setting_tuple)
+    # 生成時間が長い場合に備えて生成中であることを示すテキストを表示
+    print('\nダミーデータを生成しています……。')
+    raw = ut.generate_dummy_data_raw(generate_rows_num, faker_language, seed_value, generate_data_dict)
+    print('ダミーデータを生成しました。')
+
+    # remove_wqm の設定が TRUE であれば " " の削除関数を実行する
+    if remove_wqm:
+        print('\n" " を削除しています……。')
+        raw = ut.remove_wqm(raw)
+        print('" " を削除しました。')
 
     # 生成結果プレビューをプリント
     ut.print_relust(raw)
