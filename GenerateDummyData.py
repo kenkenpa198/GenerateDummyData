@@ -17,14 +17,19 @@ try:
     # 表示したリストから設定ファイルの選択を要求しファイルパスを取得
     setting_file_path = ut.request_select_file_path_list(setting_file_path_list)
 
+    # 読み込むファイルの情報を表示する
+    print('\n以下のファイルを読み込みます。続けるには Enter キーを押してください。')
+    input(setting_file_path)
+
     # 設定ファイルから設定値を読み込んでタプルとして格納
     setting_tuple = ut.import_json(setting_file_path)
 
     # 生成設定をプリント
+    input('\n設定情報の読み込みに成功しました。Enter キーを押すと生成の設定を表示します。')
     ut.print_settings(*setting_tuple)
 
     print('\n上記の設定でダミーデータを生成します。')
-    print('問題なければ Enter キーを送信してください。')
+    print('問題なければ Enter キーを押してください。')
 
     print('\n[!] 生成する行数が多すぎると完了まで時間がかかる場合があります。')
     input('    処理の途中で中断する場合は Ctrl + C キーを押してください。')
@@ -53,4 +58,4 @@ try:
 except KeyboardInterrupt:
     print('\nキーボード入力により処理を中断しました。')
 
-print('\nGenerateDummyData を終了します。\n')
+print('\nGenerateDummyData を終了します。')
