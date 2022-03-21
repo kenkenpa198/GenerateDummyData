@@ -21,9 +21,16 @@ def get_setting_file_path_list():
     setting_file_path_list = [p for p in glob.glob('settings/**/*.json', recursive=True)
        if os.path.isfile(p)]
 
-    # 設定ファイルパスのリストを昇順に並び替えて返す
-    setting_file_path_list.sort()
-    return setting_file_path_list
+    if setting_file_path_list:
+        # 設定ファイルパスのリストを昇順に並び替えて返す
+        setting_file_path_list.sort()
+        return setting_file_path_list
+
+    else:
+        print('\n[!] 設定ファイルのリストを取得できませんでした。')
+        print('    GenerateDummyData.py と同階層に settings フォルダがあることや\n    settings フォルダの中に JSON ファイルが存在することを確認してください。')
+        print('\nツールの実行を終了します。')
+        sys.exit()
 
 
 
@@ -230,6 +237,8 @@ https://www.nblog09.com/w/2019/01/24/python-faker/
 Faker の公式リファレンス
 https://faker.readthedocs.io/en/master/index.html
 https://faker.readthedocs.io/en/master/providers/faker.providers.misc.html?highlight=csv#faker.providers.misc.Provider.csv
+
+TODO: 設定が異常値などで関数の実行に失敗した際の例外処理を加える
 
 '''
 def generate_dummy_data_raw(generate_rows_num, faker_language, seed_value, generate_data_dict):
