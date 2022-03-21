@@ -102,16 +102,23 @@ def import_json(json_file_path):
         add_wqm_flag          = du.strtobool(json_dict["add_wqm"]) # Bool 型へ変換
         generate_dummy_data_dict = json_dict["generate_dummy_data_dict"]
 
-    # 例外処理: JSON のデコードエラーをキャッチしたとき
+    # 例外処理: JSON のデコードエラーをキャッチしたとき（JSON ファイルの書き方が間違っている場合など）
     except json.decoder.JSONDecodeError as e:
         print('\n[!] JSON 情報のデコードに失敗しました。JSON ファイルの記述に問題がないか確認してください。')
         print(f'    json.decoder.JSONDecodeError: {e}')
         print('\nツールの実行を終了します。')
         sys.exit()
 
-    # 例外処理: 存在しない辞書のキーを参照しているエラーをキャッチしたとき
+    # 例外処理: 存在しない辞書のキーを参照しているエラーをキャッチしたとき（左辺がいじられている時など）
     except KeyError as e:
         print('\n[!] 設定値の取得に失敗しました。下記に表示されている設定値の記述に問題がないか確認してください。')
+        print(f'    KeyError: {e}')
+        print('\nツールの実行を終了します。')
+        sys.exit()
+
+    # 例外処理: 値エラーをキャッチしたとき（add_wqm の Bool 値変換に失敗）
+    except ValueError as e:
+        print('\n[!] 値エラーを検知しました。add_wqm 設定の値が「True」または「False」で記述されているか確認してください。')
         print(f'    KeyError: {e}')
         print('\nツールの実行を終了します。')
         sys.exit()
@@ -279,6 +286,17 @@ def generate_dummy_data_raw(generate_rows_num, faker_language, seed_value, gener
 
 '''
 ■ ダブルクォーテーションを除去する関数
+
+faker はデフォルトだと " " が付与された状態で値を出力する。
+それを除去する関数。
+
+この関数が動作する条件の設定値は「add_wqm」なのに、実際には削除（remove）するという挙動になっているが、
+これはツールの設定を行う際に感覚的にわかりやすくするため。
+
+「remove_wqm」を「True」にすると「" " を除去する」よりも、
+「add_wqm」を「True」にすると「" " を付与する」の方が
+デフォルトの挙動を前提に考える必要が無くわかりやすい（と思っている……）
+
 '''
 def remove_wqm(csv_raw):
 
