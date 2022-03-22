@@ -5,9 +5,10 @@
     "add_wqm"          : "False",
     "generate_dummy_data_dict": {
         "member_id"        : "TEST_{{user_name}}",
-        "member_name"      : "テスト_{{name}}",
         "member_uuid"      : "{{uuid4}}",
-        "email_address"    : "{{email}}",
+        "member_name"      : "テスト_{{name}}",
+        "email_address"    : "TEST_{{email}}",
+        "age"              : "{{random_number}}",
         "is_opt_in"        : "{{boolean}}",
         "hobby"            : "{{word}}",
         "birth_date"       : "{{date}}",
