@@ -1,7 +1,7 @@
 <!-- omit in toc -->
 # GenerateDummyData
 
-![kv](.images/kv.jpg)
+![キービジュアル](.images/kv.jpg)
 
 GenerateDummyData は、ランダムなダミーデータを生成して CSV 形式で出力するツールです。
 
@@ -189,19 +189,19 @@ time             | 時間（hh:mm:ss 形式）。                               
 その他のオプションについては下記を参考にしてみてください。
 
 - [[Laravel5.1]Fakerチートシート - Qiita](https://qiita.com/tosite0345/items/1d47961947a6770053af)
-  - オプションが日本語でまとまっている記事。
-  - ただし Python 版用では無いので、パスカルケースのものはそのままだと動きません。
-  - パスカルケースをスネークケースに変更すれば動くみたいです（UUID など一部を除く）。  
+    - オプションが日本語でまとまっている記事。
+    - ただし Python 版用では無いので、パスカルケースのものはそのままだと動きません。
+    - パスカルケースをスネークケースに変更すれば動くみたいです（UUID など一部を除く）。  
   例）DateTime ⇒ date_time
 
 - [Faker 公式リファレンス > 標準のオプションリスト](https://faker.readthedocs.io/en/master/providers.html)
-  - 公式の標準オプションリスト。カテゴリごとに各ページへ分かれています。
-  - 英語のドキュメントなのでちょっと読みづらいです。
-  - 名前系だけでも苗字のみやカタカナ等々たくさんの種類が存在。MAC アドレスもあったりと、かなり幅が広いようです。
+    - 公式の標準オプションリスト。カテゴリごとに各ページへ分かれています。
+    - 英語のドキュメントなのでちょっと読みづらいです。
+    - 名前系だけでも苗字のみやカタカナ等々たくさんの種類が存在。MAC アドレスもあったりと、かなり幅が広いようです。
 
 - [Faker 公式リファレンス > 日本語対応のオプションリスト](https://faker.readthedocs.io/en/master/locales/ja_JP.html)
-  - 言語設定を日本語にした際に、オプションごとにどう表示が変わるかまで掲載されているリストです。
-  - ただし中途半端にしか掲載されていないようなので、前述の標準のオプションリストを確認する方がいいかも。
+    - 言語設定を日本語にした際に、オプションごとにどう表示が変わるかまで掲載されているリストです。
+    - ただし中途半端にしか掲載されていないようなので、前述の標準のオプションリストを確認する方がいいかも。
 
 ## 7. その他メモ
 
@@ -212,21 +212,18 @@ time             | 時間（hh:mm:ss 形式）。                               
 GenerateDummyData は MIT ライセンスの下でリリースされています。  
 ライセンス全文はディレクトリ直下の LICENSE ファイルをご確認ください。
 
-## 9. クレジット
+## 9. 使用ソフトウェア
 
-### 9.1. 利用ソフトウェア
+- [joke2k/faker](https://github.com/joke2k/faker)  
+Copyright (c) 2012 Daniele Faraglia  
+License : [https://github.com/joke2k/faker/blob/master/LICENSE.txt](https://github.com/joke2k/faker/blob/master/LICENSE.txt)
+- [サクラエディタ](https://sakura-editor.github.io/)  
+※ README の一部画像で使用させていただいております。
 
-- [Python](https://www.python.org/)
-- [joke2k/faker](https://github.com/joke2k/faker)
-
-### 9.2. 参考サイト様
+## 10. 参考文献
 
 - [Welcome to Faker's documentation! — Faker 13.3.2 documentation](https://faker.readthedocs.io/en/master/index.html)
 - [Pythonでそれっぽいテストデータを作成する(前編) - Qiita](https://qiita.com/nandymak/items/1ab36e3d5365e8ca2942)
 - [PythonにてFakerを用いてランダムなテストデータを生成する方法 - N-blog 09](https://www.nblog09.com/w/2019/01/24/python-faker/)
 - [【Python】CSVファイルのダミーデータを作成する方法](https://gist.github.com/kurozumi/4642d8a70440c57a2719c0e5c02013c5)
 - [[Laravel5.1]Fakerチートシート - Qiita](https://qiita.com/tosite0345/items/1d47961947a6770053af)
-
-### 9.3. その他
-
-- [サクラエディタ](https://sakura-editor.github.io/)（README の一部画像で使用させていただいています）
